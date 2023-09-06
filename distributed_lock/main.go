@@ -3,8 +3,8 @@ package main
 import (
 	"context"
 	"fmt"
-	"lock/inc"
 	"lock/interf"
+	"lock/lua"
 	"time"
 
 	"github.com/go-redis/redis/v8"
@@ -24,7 +24,8 @@ func main() {
 	// 初始化Redis客户端
 	Init()
 	defer redisClient.Close()
-	interF := interf.Register(&inc.Inc{Ctx: ctx, RedisCli: redisClient})
+	// interF := interf.Register(&inc.Inc{Ctx: ctx, RedisCli: redisClient})
+	interF := interf.Register(&lua.Lua{Ctx: ctx, RedisCli: redisClient})
 	// 尝试获取锁
 	if interF.AcquireLock() {
 		defer interF.ReleaseLock() // 确保在函数结束时释放锁

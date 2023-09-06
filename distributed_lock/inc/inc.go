@@ -26,7 +26,8 @@ func (i *Inc) AcquireLock() bool {
 	return true
 }
 
-func (i *Inc) ReleaseLock() {
+func (i *Inc) ReleaseLock() bool {
 	// 释放锁
 	i.RedisCli.Del(i.Ctx, lockKey)
+	return true
 }

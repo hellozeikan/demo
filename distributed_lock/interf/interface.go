@@ -2,7 +2,7 @@ package interf
 
 type Interf interface {
 	AcquireLock() bool
-	ReleaseLock()
+	ReleaseLock() bool
 }
 
 func Register(i Interf) Interf {
