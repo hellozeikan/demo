@@ -1,8 +1,8 @@
 package interf
 
 type Interf interface {
-	AcquireLock() bool
-	ReleaseLock() bool
+	AcquireLock(lockKey string) bool
+	ReleaseLock(lockKey string) bool
 }
 
 func Register(i Interf) Interf {

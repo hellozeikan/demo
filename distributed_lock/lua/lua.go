@@ -14,13 +14,12 @@ type Lua struct {
 }
 
 const (
-	lockKey    = "mylock"
 	lockExpire = 10 * time.Second
 )
 
 var nodeIdentifier = rand.Int63n(10000)
 
-func (l *Lua) AcquireLock() bool {
+func (l *Lua) AcquireLock(lockKey string) bool {
 	// 尝试获取锁
 	success, err := l.RedisCli.SetNX(l.Ctx, lockKey, nodeIdentifier, lockExpire).Result()
 	if err != nil || !success {
@@ -33,7 +32,7 @@ func (l *Lua) AcquireLock() bool {
 	return true
 }
 
-func (l *Lua) ReleaseLock() bool {
+func (l *Lua) ReleaseLock(lockKey string) bool {
 	// 释放锁
 	luaScript := `
         if redis.call("get", KEYS[1]) == ARGV[1] then

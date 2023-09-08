@@ -13,11 +13,10 @@ type Inc struct {
 }
 
 const (
-	lockKey    = "mylock"
 	lockExpire = 10 * time.Second
 )
 
-func (i *Inc) AcquireLock() bool {
+func (i *Inc) AcquireLock(lockKey string) bool {
 	// 尝试获取锁
 	success, err := i.RedisCli.SetNX(i.Ctx, lockKey, "locked", lockExpire).Result()
 	if err != nil || !success {
@@ -26,7 +25,7 @@ func (i *Inc) AcquireLock() bool {
 	return true
 }
 
-func (i *Inc) ReleaseLock() bool {
+func (i *Inc) ReleaseLock(lockKey string) bool {
 	// 释放锁
 	i.RedisCli.Del(i.Ctx, lockKey)
 	return true
